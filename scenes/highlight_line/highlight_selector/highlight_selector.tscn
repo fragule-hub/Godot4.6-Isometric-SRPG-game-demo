@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://d2qjvxor7ulxr"]
+
+[ext_resource type="PackedScene" uid="uid://tbdhi4d81ewt" path="res://scenes/highlight_line/highlight_line.tscn" id="1_1eukw"]
+[ext_resource type="Script" uid="uid://yium75j6rrg3" path="res://scenes/highlight_line/highlight_selector/highlight_selector.gd" id="2_golwv"]
+
+[node name="HighlightSelector" unique_id=782185329 instance=ExtResource("1_1eukw")]
+z_index = 1
+script = ExtResource("2_golwv")
+
+[node name="Label-1" type="Label" parent="." index="0" unique_id=1731841756]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -36.0
+offset_right = 40.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 16
+text = "grass_land"
+horizontal_alignment = 1
+
+[node name="Label-2" type="Label" parent="." index="1" unique_id=561537040]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 16
+text = "null"
+horizontal_alignment = 1
+
+[node name="Label-3" type="Label" parent="." index="2" unique_id=2062060431]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = 8.0
+offset_right = 16.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 16
+text = "(3,4)"
+horizontal_alignment = 1

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="KnockbackSkill" format=3 uid="uid://dm5k5p5n6x0k"]
+
+[ext_resource type="Script" uid="uid://cvemtd7byij3e" path="res://data/skills/scripts/knockback_skill.gd" id="1_kb5kl"]
+
+[resource]
+script = ExtResource("1_kb5kl")
+skill_name = "击退攻击"
+animation_name = "attack"
+description = "对目标方向1格内的单位击退3格。"
+origin_type = 0
+area_range = Vector2i(2, 0)
+area_shape = 2
+is_directional = true

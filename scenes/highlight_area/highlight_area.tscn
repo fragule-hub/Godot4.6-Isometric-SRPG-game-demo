@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b4u822m6rpnjh"]
+
+[ext_resource type="Script" uid="uid://clw5fcosec3yb" path="res://scenes/highlight_area/highlight_area.gd" id="1_k7b1t"]
+[ext_resource type="PackedScene" uid="uid://tbdhi4d81ewt" path="res://scenes/highlight_line/highlight_line.tscn" id="2_msf4w"]
+
+[node name="HighlightArea" type="Polygon2D" unique_id=575090217]
+color = Color(1, 1, 1, 0.5019608)
+polygon = PackedVector2Array(-16, 0, 0, -8, 16, 0, 0, 8, -16, 0)
+script = ExtResource("1_k7b1t")
+
+[node name="HighlightLine" parent="." unique_id=782185329 instance=ExtResource("2_msf4w")]
+default_color = Color(0, 0, 0, 0.5019608)

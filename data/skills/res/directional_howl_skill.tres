@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DirectionalHowlSkill" format=3 uid="uid://b4h7sbdwn8ktr"]
+
+[ext_resource type="Script" uid="uid://ksbpg44d012n" path="res://data/skills/scripts/directional_howl_skill.gd" id="1_7i33c"]
+
+[resource]
+script = ExtResource("1_7i33c")
+skill_name = "定向吼叫"
+animation_name = "howl"
+description = "朝指定方向造成150%攻击力范围伤害。"
+origin_type = 0
+area_range = Vector2i(3, 1)
+area_shape = 2
+is_directional = true
+power_multiplier = 1.5
+target_filter = 0

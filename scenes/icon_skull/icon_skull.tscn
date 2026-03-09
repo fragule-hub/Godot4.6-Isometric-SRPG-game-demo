@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://5wwkhf6n6x0o"]
+
+[ext_resource type="Texture2D" uid="uid://dfyd6ttlvkywh" path="res://assets/icon/icon_skull.png" id="1_e4pbg"]
+[ext_resource type="Script" uid="uid://dro0njv8x33yu" path="res://scenes/icon_skull/icon_skull.gd" id="2_2jh3n"]
+
+[node name="IconSkull" type="Sprite2D" unique_id=699364296]
+z_index = 2
+texture = ExtResource("1_e4pbg")
+script = ExtResource("2_2jh3n")

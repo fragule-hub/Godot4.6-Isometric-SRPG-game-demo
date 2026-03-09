@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://bd7lsxqpkmdaw"]
+
+[ext_resource type="SpriteFrames" uid="uid://cclksbsxiwm2w" path="res://assets/wolf_sprite_frames.tres" id="1_fmv3f"]
+[ext_resource type="Script" uid="uid://ch8swmt5431b2" path="res://scenes/unit/unit.gd" id="1_fvc8g"]
+[ext_resource type="Script" uid="uid://cfd85vs44mhv7" path="res://data/skills/base_skill.gd" id="2_3po7s"]
+[ext_resource type="Resource" uid="uid://bhypcaasfyhuo" path="res://data/skills/res/howl_skill.tres" id="3_0wuuu"]
+[ext_resource type="Resource" uid="uid://b4h7sbdwn8ktr" path="res://data/skills/res/directional_howl_skill.tres" id="4_w7udy"]
+[ext_resource type="Resource" uid="uid://tpnuap4v6idn" path="res://data/skills/res/healing_howl_skill.tres" id="5_vqlpx"]
+[ext_resource type="Resource" uid="uid://dm5k5p5n6x0k" path="res://data/skills/res/knockback_attack.tres" id="6_0wuuu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fvc8g"]
+size = Vector2(32, 32)
+
+[node name="Unit" type="Area2D" unique_id=318891723]
+y_sort_enabled = true
+script = ExtResource("1_fvc8g")
+move_point = 12
+move_cost_map = {
+0: 2,
+1: 1,
+2: 2,
+3: -1
+}
+max_hp = 12
+skills = Array[ExtResource("2_3po7s")]([ExtResource("3_0wuuu"), ExtResource("4_w7udy"), ExtResource("5_vqlpx"), ExtResource("6_0wuuu")])
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=332854097]
+sprite_frames = ExtResource("1_fmv3f")
+animation = &"SE_IDLE"
+autoplay = "SE_IDLE"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1221278186]
+visible = false
+shape = SubResource("RectangleShape2D_fvc8g")

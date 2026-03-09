@@ -1,0 +1,2 @@
+extends BaseSkill
+class_name HowlSkill

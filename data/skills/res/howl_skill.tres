@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HowlSkill" format=3 uid="uid://bhypcaasfyhuo"]
+
+[ext_resource type="Script" uid="uid://dawyophgnkl35" path="res://data/skills/scripts/howl_skill.gd" id="1_sbesv"]
+
+[resource]
+script = ExtResource("1_sbesv")
+skill_name = "嚎叫"
+animation_name = "howl"
+description = "对周围目标造成100%攻击力伤害。"
+origin_type = 0
+area_range = Vector2i(4, 0)

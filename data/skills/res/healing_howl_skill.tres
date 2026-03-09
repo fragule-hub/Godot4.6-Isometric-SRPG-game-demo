@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="HealingHowlSkill" format=3 uid="uid://tpnuap4v6idn"]
+
+[ext_resource type="Script" uid="uid://enj3jixx8dy8" path="res://data/skills/scripts/healing_howl_skill.gd" id="1_d3wtu"]
+
+[resource]
+script = ExtResource("1_d3wtu")
+skill_name = "治愈吼叫"
+animation_name = "howl"
+description = "恢复范围内单位50%攻击力生命值。"
+cast_range = 4
+cast_algorithm = 1
+area_range = Vector2i(1, 0)
+area_algorithm = 2
+power_multiplier = 0.5
+include_self = true
+target_filter = 2
