@@ -4,10 +4,12 @@
 
 [resource]
 script = ExtResource("1_kb5kl")
+knockback_distance = 8
 skill_name = "击退攻击"
-animation_name = "attack"
-description = "对目标方向1格内的单位击退3格。"
+animation_name = "ATTACK"
+description = "对目标方向1格内的单位击退。"
 origin_type = 0
 area_range = Vector2i(2, 0)
 area_shape = 2
 is_directional = true
+target_filter = 0

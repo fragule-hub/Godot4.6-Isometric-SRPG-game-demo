@@ -109,6 +109,7 @@ func _on_unit_died(unit: Unit) -> void:
 		active_units.erase(unit)
 		print("Battle: Unit removed from active list. Remaining: ", active_units.size())
 
+
 ## 备份当前所有单位的状态
 func backup_state() -> void:
 	_backup_state.clear()

@@ -70,7 +70,14 @@ func execute_knockback(attacker: Unit, defender: Unit, distance: int = -1, per_c
 
 	# 4. 执行击退动画
 	# 单位将从 start_cell 平滑移动到 landing_cell
-	await _play_knockback_animation(defender, start_cell, landing_cell, actual_per_cell_time)
+	if collision_type != COLLISION_NONE:
+		var collision_cell = plan[KEY_COLLISION_CELL]
+		defender.z_index = 1
+		await _play_knockback_animation(defender, start_cell, collision_cell, actual_per_cell_time)
+		await _play_collision_bounce(defender, collision_cell, landing_cell, actual_per_cell_time)
+		defender.z_index = 0
+	else:
+		await _play_knockback_animation(defender, start_cell, landing_cell, actual_per_cell_time)
 
 	# 5. 处理碰撞伤害
 	# 如果在移动过程中单位没有死亡则结算碰撞伤害
@@ -179,7 +186,7 @@ func _check_collision(cell: Vector2i, ignore_unit: Unit) -> Dictionary:
 		result.type = COLLISION_UNIT
 		result.unit = other_unit
 		return result
-
+		
 	return result
 
 
@@ -195,13 +202,8 @@ func _play_knockback_animation(unit: Unit, start_cell: Vector2i, end_cell: Vecto
 	# 获取世界坐标
 	var target_pos = _cell_to_world(end_cell)
 
-	# 确定单位朝向（通常是被击退的方向，即面向移动方向的相反方向，或者表现为踉跄后退）
-	# 这里简单处理为面向移动方向（如果想表现后退，可以取反）
-	var dir_vector = _normalize_step(end_cell - start_cell)
-	var unit_dir = _vector_to_direction(dir_vector)
-	
 	# 设置单位动画状态
-	unit.play_idle(unit_dir) # 或者播放专门的受击/后退动画
+	unit.play_idle() # 或者播放专门的受击/后退动画
 
 	# 使用 Tween 执行平滑移动
 	var tween = create_tween()
@@ -211,10 +213,30 @@ func _play_knockback_animation(unit: Unit, start_cell: Vector2i, end_cell: Vecto
 	await tween.finished
 
 
+## 播放碰撞回弹动画
+func _play_collision_bounce(unit: Unit, collision_cell: Vector2i, bounce_back_cell: Vector2i, per_cell_time: float) -> void:
+	if collision_cell == bounce_back_cell:
+		return
+	
+	var bounce_back_pos = _cell_to_world(bounce_back_cell)
+	var bounce_duration = max(0.03, per_cell_time * 0.35)
+	
+	# 修改：不再强制改变朝向，保持原有朝向
+	unit.play_idle()
+	
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(unit, "position", bounce_back_pos, bounce_duration)
+	
+	await tween.finished
+
+
 ## 处理跌落深渊逻辑
 func _handle_fall(unit: Unit) -> void:
 	if not is_instance_valid(unit):
 		return
+	
+	unit.z_index = -1
 
 	# 创建跌落动画
 	var tween = create_tween()
@@ -289,12 +311,15 @@ func _is_landing_unsafe(cell: Vector2i) -> bool:
 	if not _is_grid_ready(): return true
 	var data = game_area.game_grid.get_cell_data(cell)
 	
-	# 数据为空或没有 terrain 字段，视为不安全
+	# 数据为空或没有 terrain 字段，视为不安全 (虚空)
 	if data.is_empty() or not data.has("terrain"):
 		return true
 	
-	# 假设 terrain 为 null 表示没有地块（深渊）
-	return data.get("terrain") == null
+	var terrain = data.get("terrain")
+	if terrain == GameGrid.Terrain.RIVER:
+		return true
+	
+	return false
 
 func _cell_to_world(cell: Vector2i) -> Vector2:
 	return game_area.get_global_from_tile(cell) + Unit.DEFAULT_OFFSET

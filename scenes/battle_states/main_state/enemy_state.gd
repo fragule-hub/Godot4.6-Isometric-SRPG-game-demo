@@ -170,8 +170,6 @@ func _try_attack(unit: Unit) -> void:
 	# 4. 执行攻击
 	# 使用 AttackProcessor 执行攻击逻辑
 	await battle.attack_processor.execute_attack(unit, best_target)
-	if is_instance_valid(best_target) and best_target._current_hp > 0:
-		await battle.knockback_processor.execute_knockback(unit, best_target)
 
 
 # 结束回合

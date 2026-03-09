@@ -6,8 +6,8 @@ var _last_hovered_tile: Vector2i = Vector2i(-999, -999)
 var _is_moving: bool = false
 
 func _on_enter() -> void:
-	if battle._main_unit.get_faction() != Unit.Faction.FRIENDLY:
-		parent_fsm.change_state("EnemyState")
+	#if battle._main_unit.get_faction() != Unit.Faction.FRIENDLY:
+		#parent_fsm.change_state("EnemyState")
 	_is_moving = false
 	var unit = battle._main_unit
 	if not unit:

@@ -121,23 +121,22 @@ func get_skill_area_cells(_caster: Unit, target_pos: Vector2i, direction: Vector
 ## @param caster: 施法者
 ## @param target_pos: 目标中心点
 ## @param direction: 技能方向
-## @param game_grid: 游戏网格
-## @param range_calculator: 范围计算器
-## @param attack_processor: 攻击处理器 (用于处理伤害/治疗结算)
-func execute(caster: Unit, target_pos: Vector2i, direction: Vector2i, game_grid: GameGrid, range_calculator: RangeCalculator, attack_processor: AttackProcessor = null) -> void:
+## @param battle: 战斗场景上下文 (提供 GameGrid, RangeCalculator, AttackProcessor 等)
+func execute(caster: Unit, target_pos: Vector2i, direction: Vector2i, battle: Battle) -> void:
 	# 1. 获取技能覆盖的所有网格
-	var affected_cells: Array[Vector2i] = get_skill_area_cells(caster, target_pos, direction, range_calculator)
+	var affected_cells: Array[Vector2i] = get_skill_area_cells(caster, target_pos, direction, battle.range_calculator)
 	
 	# 2. 遍历网格，筛选有效目标并应用效果
 	for cell in affected_cells:
-		var cell_data: Dictionary = game_grid.get_cell_data(cell)
+		var cell_data: Dictionary = battle.game_area.game_grid.get_cell_data(cell)
 		# 检查格子上是否有单位
 		var target_unit: Unit = cell_data.get("unit", null)
 		
 		# 验证目标是否符合筛选条件
 		if target_unit and _is_valid_target(caster, target_unit):
 			# 3. 应用具体效果 (伤害、治疗、Buff等)
-			_apply_effect(caster, target_unit, attack_processor)
+			@warning_ignore("redundant_await")
+			await _apply_effect(caster, target_unit, battle)
 
 ## 判断目标单位是否有效
 ## @param caster: 施法者
@@ -174,15 +173,10 @@ func _is_valid_target(caster: Unit, target: Unit) -> bool:
 ## 应用具体效果（虚函数，由子类重写）
 ## @param caster: 施法者
 ## @param target: 目标单位
-## @param attack_processor: 攻击处理器
-func _apply_effect(caster: Unit, target: Unit, attack_processor: AttackProcessor) -> void:
+## @param battle: 战斗场景上下文
+func _apply_effect(caster: Unit, target: Unit, battle: Battle) -> void:
 	# 默认实现：如果提供了 attack_processor，则造成基于倍率的伤害
-	if attack_processor:
+	if battle.attack_processor:
 		# 调用攻击处理器的造成伤害方法
-		# 注意：此处假设 AttackProcessor 有 execute_damage_no_animation 方法
-		attack_processor.execute_damage_no_animation(caster, target, power_multiplier)
+		battle.attack_processor.execute_damage_no_animation(caster, target, power_multiplier)
 		return
-	
-	# 如果没有 attack_processor，尝试直接扣血 (作为后备逻辑)
-	var damage = max(1, int(caster.get_atk() * power_multiplier))
-	target.take_damage(damage)

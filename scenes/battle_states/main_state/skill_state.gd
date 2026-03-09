@@ -206,13 +206,11 @@ func _execute_skill() -> void:
 	await _play_skill_animation(caster, _pending_direction)
 	
 	# 2. 动画完成后，再执行技能效果 (伤害/治疗等)
-	current_skill.execute(
+	await current_skill.execute(
 		caster,
 		_pending_target_pos,
 		_pending_direction,
-		battle.game_area.game_grid,
-		battle.range_calculator,
-		battle.attack_processor
+		battle
 	)
 	
 	print("SkillState: Skill executed!")
