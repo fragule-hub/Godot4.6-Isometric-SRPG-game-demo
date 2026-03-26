@@ -17,11 +17,11 @@ func _on_enter() -> void:
 		
 	# 检查是否所有单位阵营一致
 	var first_unit = battle.active_units[0]
-	var winning_faction = first_unit.faction
+	var winning_faction = first_unit.get_faction()
 	var all_same_faction = true
 	
 	for i in range(1, battle.active_units.size()):
-		if battle.active_units[i].faction != winning_faction:
+		if battle.active_units[i].get_faction() != winning_faction:
 			all_same_faction = false
 			break
 			

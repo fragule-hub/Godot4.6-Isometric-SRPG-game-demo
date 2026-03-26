@@ -7,9 +7,9 @@ const UNIT = preload("uid://bd7lsxqpkmdaw")
 
 ## 生成单个单位
 ## pos: 世界坐标位置
+## stat: 单位属性资源
 ## faction: 阵营，默认为 ENEMY
-## color: 单位颜色，默认为白色
-func spawn_unit(pos: Vector2, faction: Unit.Faction = Unit.Faction.ENEMY, color: Color = Color.WHITE) -> Unit:
+func spawn_unit(pos: Vector2, stat: UnitStat, faction: Unit.Faction = Unit.Faction.ENEMY) -> Unit:
 	var unit_instance = UNIT.instantiate() as Unit
 	unit_instance.position = pos
 	
@@ -18,6 +18,6 @@ func spawn_unit(pos: Vector2, faction: Unit.Faction = Unit.Faction.ENEMY, color:
 	else:
 		add_child(unit_instance)
 		
-	unit_instance.faction = faction
-	unit_instance.set_unit_color(color)
+	unit_instance.set_faction(faction)
+	unit_instance.unit_stat = stat
 	return unit_instance

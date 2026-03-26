@@ -8,8 +8,6 @@ class_name AttackProcessor
 
 signal attack_finished(attacker: Unit, defender: Unit)
 
-# --- 公共接口 ---
-
 ## 执行完整攻击流程（包含动画）
 ## @param attacker: 攻击方单位
 ## @param defender: 防守方单位
@@ -31,12 +29,12 @@ func execute_attack(attacker: Unit, defender: Unit) -> void:
 	# 4. 发送攻击结束信号
 	attack_finished.emit(attacker, defender)
 
-## 执行无动画伤害（基于攻击者属性）
+## 执行伤害（基于攻击者属性）
 ## @param attacker: 攻击方
 ## @param defender: 防守方
 ## @param power_multiplier: 攻击倍率
 ## @return: 实际造成的伤害值
-func execute_damage_no_animation(attacker: Unit, defender: Unit, power_multiplier: float = 1.0) -> int:
+func execute_damage(attacker: Unit, defender: Unit, power_multiplier: float = 1.0) -> int:
 	if not _validate_units(attacker, defender):
 		return 0
 		
@@ -45,13 +43,12 @@ func execute_damage_no_animation(attacker: Unit, defender: Unit, power_multiplie
 	apply_damage(defender, damage)
 	return damage
 
-## 执行无动画伤害（基于固定攻击值，通常用于环境/碰撞伤害）
+## 执行世界伤害（基于固定攻击值，通常用于环境/碰撞伤害）
 ## 注意：此伤害仍会受防御力影响
-## @param attacker: 攻击来源（可以为 null，视业务逻辑而定，但此处保留参数以兼容旧接口）
 ## @param defender: 受击方
 ## @param fixed_attack_value: 固定的攻击力数值
 ## @return: 实际造成的伤害值
-func execute_damage_no_animation_by_world(defender: Unit, fixed_attack_value: int) -> int:
+func execute_world_damage(defender: Unit, fixed_attack_value: int) -> int:
 	if not defender:
 		return 0
 		
@@ -72,8 +69,6 @@ func execute_heal(caster: Unit, target: Unit, power_multiplier: float = 1.0) -> 
 	var amount = calculate_unit_attack_power(caster, power_multiplier)
 	target.heal(amount)
 	return amount
-
-# --- 计算逻辑 ---
 
 ## 计算两个单位之间的伤害（基于当前状态）
 func calculate_damage(attacker: Unit, defender: Unit) -> int:
@@ -100,8 +95,6 @@ func apply_damage(target: Unit, amount: int) -> void:
 		return
 	target.take_damage(max(0, amount))
 
-# --- 内部辅助方法 ---
-
 ## 验证单位有效性
 func _validate_units(unit_a: Unit, unit_b: Unit) -> bool:
 	if not unit_a or not unit_b:
@@ -111,20 +104,15 @@ func _validate_units(unit_a: Unit, unit_b: Unit) -> bool:
 
 ## 播放攻击动画
 func _play_attack_animation(attacker: Unit, defender: Unit) -> void:
-	# 计算攻击方向
 	var dir = _get_attack_direction(attacker.position, defender.position)
 	
-	# 播放动画
 	attacker.play_animation(Unit.ANIM_STATE.ATTACK, dir)
 	
-	# 等待动画结束
 	if attacker.animated_sprite:
 		await attacker.animated_sprite.animation_finished
 	else:
-		# 如果没有动画组件，简单的延时模拟
 		await get_tree().create_timer(0.5).timeout
 	
-	# 恢复待机状态
 	attacker.play_idle(dir)
 
 ## 根据位置计算攻击方向

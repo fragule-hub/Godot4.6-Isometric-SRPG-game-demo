@@ -6,15 +6,14 @@ var _last_hovered_tile: Vector2i = Vector2i(-999, -999)
 var _is_moving: bool = false
 
 func _on_enter() -> void:
-	#if battle._main_unit.get_faction() != Unit.Faction.FRIENDLY:
-		#parent_fsm.change_state("EnemyState")
 	_is_moving = false
-	var unit = battle._main_unit
+	var unit = battle.get_main_unit()
 	if not unit:
 		push_warning("MoveState: No main unit found!")
 		return
 
 	# 0. 备份状态（用于重置）
+	battle.backup_game_state()
 	battle.backup_state()
 
 	# 1. 初始化 AStar 并获取可移动范围
@@ -46,7 +45,7 @@ func _state_process(_delta: float) -> void:
 	_last_hovered_tile = current_tile
 	var last_path_pos = _update_path_preview(current_tile)
 	
-	if last_path_pos != null:
+	if last_path_pos != Vector2i(-999, -999):
 		_update_attack_preview(last_path_pos)
 	else:
 		battle.range_selector.clear_range("attack_range")
@@ -57,7 +56,7 @@ func _state_input(event: InputEvent) -> void:
 	if event.is_action_pressed("mouse_left"):
 		var current_tile = battle.game_area.get_hovered_tile()
 
-		var unit = battle._main_unit
+		var unit = battle.get_main_unit()
 		# 0. 如果点击的是单位当前位置，视为原地待机/移动结束
 		if unit and battle.game_area.game_grid.get_unit_position(unit) == current_tile:
 			parent_fsm.change_state("AttackState")
@@ -93,44 +92,14 @@ func _move_unit(path: Array) -> void:
 	
 	# 执行移动
 	if path.size() > 1:
-		battle.unit_mover.move_unit(battle._main_unit, path)
+		battle.unit_mover.move_unit(battle.get_main_unit(), path)
 		await battle.unit_mover.move_finished
 	
 	parent_fsm.change_state("AttackState")
 
-# func _update_path_preview(target_tile: Vector2i) -> void:
-# 	var unit = battle._main_unit
-# 	if not unit: return
-#
-# 	# 情况1：目标在移动范围内
-# 	if _reachable_cells.has(target_tile):
-# 		var path = battle.grid_calculator.get_target_path(target_tile, _parents)
-# 		if not path.is_empty():
-# 			battle.path_painter.show_path(path, "reachable", Color(1, 1, 1, 0.9))
-# 			battle.path_painter.clear_path("unreachable")
-# 		return
-#
-# 	# 情况2：目标超出范围，显示混合路径
-# 	var result = battle.grid_calculator.get_move_path(unit, target_tile)
-# 	var reachable = result.get("reachable", [])
-# 	var unreachable = result.get("unreachable", [])
-# 	
-# 	if not reachable.is_empty():
-# 		battle.path_painter.show_path(reachable, "reachable", Color(1, 1, 1, 0.9))
-# 	else:
-# 		battle.path_painter.clear_path("reachable")
-# 		
-# 	if not unreachable.is_empty():
-# 		# 视觉优化：连接可达与不可达路径
-# 		if not reachable.is_empty():
-# 			unreachable.insert(0, reachable[-1])
-# 		battle.path_painter.show_path(unreachable, "unreachable", Color(0.5, 0.5, 0.5, 0.9))
-# 	else:
-# 		battle.path_painter.clear_path("unreachable")
-
-func _update_path_preview(target_tile: Vector2i) -> Variant:
-	var unit = battle._main_unit
-	if not unit: return null
+func _update_path_preview(target_tile: Vector2i) -> Vector2i:
+	var unit = battle.get_main_unit()
+	if not unit: return Vector2i(-999, -999)
 
 	# 情况1：目标在移动范围内
 	if _reachable_cells.has(target_tile):
@@ -139,7 +108,7 @@ func _update_path_preview(target_tile: Vector2i) -> Variant:
 			battle.path_painter.show_path(path, "reachable", Color(1, 1, 1, 0.9))
 			battle.path_painter.clear_path("unreachable")
 			return path[-1]
-		return null
+		return Vector2i(-999, -999)
 
 	# 情况2：目标超出范围，显示混合路径
 	var result = battle.grid_calculator.get_move_path(unit, target_tile)
@@ -162,11 +131,11 @@ func _update_path_preview(target_tile: Vector2i) -> Variant:
 		if not reachable.is_empty():
 			return reachable[-1]
 			
-	return null
+	return Vector2i(-999, -999)
 
 
 func _update_attack_preview(center_pos: Vector2i) -> void:
-	var unit = battle._main_unit
+	var unit = battle.get_main_unit()
 	if not unit: return
 	
 	var attack_range = unit.get_attack_range()

@@ -103,8 +103,23 @@ func add_unit(unit: Node2D, cell_pos: Vector2i) -> bool:
 		push_warning("UnitGrid: Target pos is not usable: ", cell_pos)
 		return false
 		
-	# 更新网格数据
 	grid_data[cell_pos]["unit"] = unit
+	grid_changed.emit()
+	
+	return true
+
+## 从指定网格移除单位
+## 成功返回 true，失败返回 false
+func remove_unit(cell_pos: Vector2i) -> bool:
+	if not grid_data.has(cell_pos):
+		push_warning("UnitGrid: Try to remove unit from invalid pos: ", cell_pos)
+		return false
+		
+	if grid_data[cell_pos]["unit"] == null:
+		push_warning("UnitGrid: No unit at pos: ", cell_pos)
+		return false
+		
+	grid_data[cell_pos]["unit"] = null
 	grid_changed.emit()
 	
 	return true

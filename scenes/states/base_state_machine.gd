@@ -55,14 +55,13 @@ func _state_input(event: InputEvent) -> void:
 
 ## 切换到指定名称的状态
 func change_state(state_name: StringName) -> void:
-	print(state_name)
 	var new_state = states.get(state_name)
 	if not new_state:
 		push_error("State not found: " + str(state_name))
 		return
 		
 	if current_state == new_state:
-		print("state same.")
+		print("State same.")
 		#return
 	
 	var previous = current_state
@@ -73,6 +72,7 @@ func change_state(state_name: StringName) -> void:
 	
 	# 进入新状态
 	current_state = new_state
+	print(state_name)
 	current_state._on_enter()
 	
 	state_changed.emit(previous, current_state)

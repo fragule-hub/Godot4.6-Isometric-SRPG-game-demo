@@ -7,6 +7,7 @@ var _astar: AStar2D = AStar2D.new()
 var _coord_to_id: Dictionary = {}
 var _directions = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
 var _unit: Unit
+var _grid_data: Dictionary = {}
 
 ## 初始化 AStar 图
 func _initialize_astar(unit: Unit) -> void:
@@ -16,12 +17,12 @@ func _initialize_astar(unit: Unit) -> void:
 	
 	if not game_area or not game_area.game_grid: return
 	
-	var grid_data = game_area.game_grid.get_all_grid_data()
+	_grid_data = game_area.game_grid.get_all_grid_data()
 	
 	# 1. 添加有效点并设置权重
 	var move_cost_map = unit.get_move_cost_map()
 	var id_counter = 0
-	for cell_pos in grid_data:
+	for cell_pos in _grid_data:
 		var cost = _get_move_cost(move_cost_map, cell_pos)
 		if cost != -1:
 			_astar.add_point(id_counter, Vector2(cell_pos.x, cell_pos.y), float(cost))
@@ -55,6 +56,7 @@ func get_reachable_cells(unit: Unit) -> Dictionary:
 	var open_list = [[0, start_pos]]
 	
 	var move_cost_map = unit.get_move_cost_map()
+	
 	while not open_list.is_empty():
 		# 1. 取出消耗最小的节点（模拟优先队列）
 		var min_index = 0
@@ -153,18 +155,18 @@ func get_move_path(unit: Unit, target_pos: Vector2i) -> Dictionary:
 
 ## 获取移动消耗，返回 -1 表示不可通行
 func _get_move_cost(move_cost_map: Dictionary, cell_pos: Vector2i) -> int:
-	var grid_data = game_area.game_grid.get_cell_data(cell_pos)
+	var cell_data = _grid_data.get(cell_pos, {})
 	
 	# 1. 基础检查：无效点、有障碍物
-	if grid_data.is_empty() or grid_data["obstacle"] != GameGrid.Obstacle.NULL:
+	if cell_data.is_empty() or cell_data["obstacle"] != GameGrid.Obstacle.NULL:
 		return -1
 		
 	# 如果该格子有单位且不是当前正在计算的单位，则视为不可通行
-	if grid_data["unit"] != null and grid_data["unit"] != _unit:
+	if cell_data["unit"] != null and cell_data["unit"] != _unit:
 		return -1
 		
 	# 2. 根据地形计算消耗
-	var terrain_type = grid_data["terrain"]
+	var terrain_type = cell_data["terrain"]
 	
 	var cost = move_cost_map.get(terrain_type, -1)
 	

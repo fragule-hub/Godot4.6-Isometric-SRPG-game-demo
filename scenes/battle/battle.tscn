@@ -12,8 +12,8 @@
 [ext_resource type="Script" uid="uid://34v5ou3uyia8" path="res://scenes/battle/game_grid/game_grid.gd" id="9_agsc7"]
 [ext_resource type="PackedScene" uid="uid://d2qjvxor7ulxr" path="res://scenes/highlight_line/highlight_selector/highlight_selector.tscn" id="11_fisqk"]
 [ext_resource type="Script" uid="uid://brljgi4a67uhn" path="res://scripts/unit_spawner.gd" id="12_mxe8n"]
-[ext_resource type="Script" uid="uid://b0wm1fl3rkx3g" path="res://scenes/battle_states/main_state/enemy_state.gd" id="12_sgdsx"]
 [ext_resource type="Script" uid="uid://dxbem8jkfn17c" path="res://scenes/battle_states/switch_state.gd" id="12_w40i5"]
+[ext_resource type="Script" uid="uid://b0wm1fl3rkx3g" path="res://scenes/battle_states/enemy_state.gd" id="13_8eh2s"]
 [ext_resource type="Script" uid="uid://cfl41oajsota7" path="res://scripts/grid_calculator.gd" id="13_icoan"]
 [ext_resource type="Script" uid="uid://c2xvnt17g1t36" path="res://scripts/range_selector.gd" id="14_kd6yx"]
 [ext_resource type="Script" uid="uid://c2vlq6c5ip65b" path="res://scenes/battle_states/finish_state.gd" id="15_5moxy"]
@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://iw0dm5y23bq0" path="res://scripts/attack_processor.gd" id="18_mvulk"]
 [ext_resource type="Script" uid="uid://do6awmkv6124t" path="res://scenes/battle_states/main_state/skill_state.gd" id="19_4mgyt"]
 [ext_resource type="Script" uid="uid://cwaky2hix33mp" path="res://scripts/knockback_processor.gd" id="23_156m4"]
+[ext_resource type="Script" uid="uid://c6h802adkwyjv" path="res://scripts/game_reseter.gd" id="24_pyfix"]
 
 [node name="Battle" type="Node2D" unique_id=1384332]
 script = ExtResource("1_7gynk")
@@ -94,8 +95,8 @@ script = ExtResource("6_oiw7q")
 [node name="SkillState" type="Node" parent="BattleStateMachine/MainState" unique_id=607721103]
 script = ExtResource("19_4mgyt")
 
-[node name="EnemyState" type="Node" parent="BattleStateMachine/MainState" unique_id=109992424]
-script = ExtResource("12_sgdsx")
+[node name="EnemyState" type="Node" parent="BattleStateMachine" unique_id=109992424]
+script = ExtResource("13_8eh2s")
 
 [node name="EndState" type="Node" parent="BattleStateMachine" unique_id=1218617623]
 script = ExtResource("7_fisqk")
@@ -138,3 +139,7 @@ script = ExtResource("18_mvulk")
 script = ExtResource("23_156m4")
 game_area = NodePath("../GameArea")
 attack_processor = NodePath("../AttackProcessor")
+
+[node name="GameReseter" type="Node" parent="." unique_id=1986243416 node_paths=PackedStringArray("game_area")]
+script = ExtResource("24_pyfix")
+game_area = NodePath("../GameArea")

@@ -42,7 +42,7 @@ func setup(pos: Vector2, text_content: String, font_size: int = 16, color: Color
 	_active = true
 	
 	# 5. 设置延迟 Tween
-	get_tree().create_timer(AWAIT_TIME).timeout.connect(_start_vanish_tween)
+	get_tree().create_timer(AWAIT_TIME).timeout.connect(_start_free_tween)
 
 func _process(delta: float) -> void:
 	if not _active: return
@@ -52,7 +52,7 @@ func _process(delta: float) -> void:
 	# 应用位移
 	position += _velocity * delta
 
-func _start_vanish_tween() -> void:
+func _start_free_tween() -> void:
 	var tween = create_tween()
 	tween.set_parallel(true)
 	

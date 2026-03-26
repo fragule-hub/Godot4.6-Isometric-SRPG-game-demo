@@ -5,7 +5,7 @@ var _is_attacking: bool = false
 
 func _on_enter() -> void:
 	_is_attacking = false
-	var unit = battle._main_unit
+	var unit = battle.get_main_unit()
 	if not unit:
 		push_warning("AttackState: No main unit found!")
 		return
@@ -42,7 +42,7 @@ func _state_input(event: InputEvent) -> void:
 			# 2. 检查该位置是否有单位
 			var cell_data = battle.game_area.game_grid.get_cell_data(current_tile)
 			var target_unit = cell_data.get("unit")
-			var attacker_unit = battle._main_unit
+			var attacker_unit = battle.get_main_unit()
 			if target_unit and target_unit is Unit and target_unit != attacker_unit:
 				_perform_attack(attacker_unit, target_unit)
 	
@@ -60,5 +60,3 @@ func _perform_attack(unit:Unit, target_unit: Unit) -> void:
 	
 	await battle.attack_processor.execute_attack(unit, target_unit)
 	_is_attacking = false
-	# 攻击完成后切换状态
-	#parent_fsm.parent_fsm.change_state("EndState")

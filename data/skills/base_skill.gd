@@ -49,7 +49,7 @@ enum TargetFilter {
 @export var area_range: Vector2i = Vector2i(0, 0)
 ## 覆盖范围的形状 (圆形/方形/菱形等)
 @export var area_shape: RangeCalculator.ShapeType = RangeCalculator.ShapeType.CIRCLE
-## 覆盖范围的扩散方式（仅当 Shape 为 CIRCLE/DIAMOND 等需要扩散算法时生效）
+## 覆盖范围的扩散方式（仅当 Shape 为 CIRCLE等需要扩散算法时生效）
 @export var area_algorithm: RangeCalculator.DistanceAlgorithm = RangeCalculator.DistanceAlgorithm.MANHATTAN
 ## 是否需要方向判定 (true: 技能有方向性，如锥形/直线; false: 无方向，如圆形AOE)
 @export var is_directional: bool = false
@@ -81,7 +81,6 @@ func get_cast_range_cells(caster: Unit, game_grid: GameGrid, range_calculator: R
 			
 		OriginType.GLOBAL:
 			# 全图模式，返回网格中所有有效的坐标 key
-			# 假设 grid_data 的 key 为 Vector2i 类型的坐标
 			var all_cells: Array[Vector2i] = []
 			for pos in game_grid.grid_data.keys():
 				if pos is Vector2i:
@@ -147,7 +146,6 @@ func _is_valid_target(caster: Unit, target: Unit) -> bool:
 		return false
 		
 	# 特殊处理：如果目标是自己，检查 include_self 开关
-	# 注意：TargetFilter.SELF_ONLY 会在 match 中处理，这里主要处理 AOE 误伤/增益
 	if target == caster:
 		# 如果筛选器显式指定仅自身，则允许
 		if target_filter == TargetFilter.SELF_ONLY:
@@ -163,10 +161,10 @@ func _is_valid_target(caster: Unit, target: Unit) -> bool:
 			return target == caster
 		TargetFilter.ENEMY_ONLY:
 			# 敌方判定：阵营不同
-			return target.faction != caster.faction
+			return target.get_faction() != caster.get_faction()
 		TargetFilter.FRIENDLY_ONLY:
 			# 友方判定：阵营相同
-			return target.faction == caster.faction
+			return target.get_faction() == caster.get_faction()
 			
 	return false
 
@@ -178,5 +176,5 @@ func _apply_effect(caster: Unit, target: Unit, battle: Battle) -> void:
 	# 默认实现：如果提供了 attack_processor，则造成基于倍率的伤害
 	if battle.attack_processor:
 		# 调用攻击处理器的造成伤害方法
-		battle.attack_processor.execute_damage_no_animation(caster, target, power_multiplier)
+		battle.attack_processor.execute_damage(caster, target, power_multiplier)
 		return

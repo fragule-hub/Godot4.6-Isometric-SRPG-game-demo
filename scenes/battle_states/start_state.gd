@@ -1,8 +1,17 @@
 extends BaseState
 
 func _on_enter() -> void:
-	# 在回合开始时，显示单位的骷髅图标
-	if battle._main_unit:
-		battle.show_skull_on_unit(battle._main_unit)
+	var main_unit = battle.get_main_unit()
+	if not main_unit:
+		push_warning("StartState: No main unit found!")
+		return
 		
-	parent_fsm.change_state("MainState")
+	battle.show_skull_on_unit(main_unit)
+	
+	# 根据阵营决定进入哪个状态
+	if main_unit.get_faction() == Unit.Faction.FRIENDLY:
+		# 友方单位：进入玩家控制状态
+		parent_fsm.change_state("MainState")
+	else:
+		# 敌方单位：进入敌人AI状态
+		parent_fsm.change_state("EnemyState")

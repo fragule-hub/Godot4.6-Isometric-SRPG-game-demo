@@ -10,7 +10,7 @@ enum DistanceAlgorithm {
 }
 
 enum ShapeType {
-	CIRCLE = 0,     # 圆形/菱形/方形 (基于 DistanceAlgorithm)
+	CIRCLE = 0,     # 圆形 (基于 DistanceAlgorithm)
 	LINE = 1,       # 直线
 	CONE = 2,       # 扇形/锥形
 	RECTANGLE = 3   # 矩形/柱形
@@ -42,7 +42,7 @@ func get_range_cells(center_pos: Vector2i, range_val: int, algorithm: DistanceAl
 
 ## 获取有方向的技能范围
 ## start_pos: 起始位置
-## direction: 方向向量，应为基本方向（如 (1,0), (0,1), (-1,0), (0,-1)），也可支持对角线，但形状会相应旋转
+## direction: 方向向量，应为基本方向（如 (1,0), (0,1), (-1,0), (0,-1)）
 ## range_size: 范围尺寸，x: 长度/半径，y: 宽度/角度（对于线忽略 y，矩形为半宽，锥形为每步宽度增量）
 ## shape: 形状类型
 func get_directional_range_cells(start_pos: Vector2i, direction: Vector2i, range_size: Vector2i, shape: ShapeType) -> Array[Vector2i]:

@@ -20,23 +20,21 @@ const ANIM_STATE = {
 	ATTACK = "ATK",
 	DEATH = "DEATH"
 }
-
 enum Faction {ENEMY, FRIENDLY}
 @export var faction: Faction = Faction.ENEMY
-## 移动力上限
-@export var move_point: int = 8
-## 移动力地形消耗
-@export var move_cost_map: Dictionary = {
-	GameGrid.Terrain.LAND : 1,
-	GameGrid.Terrain.GRASS : 1,
-	GameGrid.Terrain.STONE : 1,
-	GameGrid.Terrain.RIVER : -1,
-}
-@export var atk_range: int = 1
-@export var atk: int = 10
-@export var def: int = 1
-@export var speed: int = 3
-@export var max_hp: int = 9
+
+## 设置阵营
+func set_faction(value: Faction) -> void:
+	faction = value
+	_update_visual()
+
+@export var unit_stat: UnitStat :
+	get:
+		return _unit_stat
+	set(value):
+		_unit_stat = value
+
+var _unit_stat: UnitStat
 var _current_hp: int = 1
 
 @export var skills: Array[BaseSkill]
@@ -47,7 +45,19 @@ var _skill: BaseSkill
 var _current_direction: Direction = Direction.SE
 
 func _ready() -> void:
-	_current_hp = max_hp
+	_unit_stat = unit_stat
+	_current_hp = get_max_hp()
+	await get_tree().process_frame
+	_update_visual()
+
+## 更新视觉表现（根据阵营设置颜色）
+func _update_visual() -> void:
+	if not is_inside_tree():
+		return
+	if faction == Faction.FRIENDLY:
+		set_unit_color(Color(0.5, 1.0, 0.5))
+	elif faction == Faction.ENEMY:
+		set_unit_color(Color(1.0, 0.5, 0.5))
 
 ## 播放指定状态动画
 func play_animation(state: String, dir: Direction = _current_direction) -> void:
@@ -96,7 +106,7 @@ func take_damage(amount: int) -> void:
 func heal(amount: int) -> void:
 	if amount <= 0:
 		return
-	_current_hp = min(max_hp, _current_hp + amount)
+	_current_hp = min(get_max_hp(), _current_hp + amount)
 	GlobalSignal.show_heal_text.emit(position, amount)
 
 ## 执行死亡逻辑
@@ -120,19 +130,19 @@ func set_unit_color(color: Color) -> void:
 
 ## 获取攻击范围
 func get_attack_range() -> int:
-	return atk_range
+	return _unit_stat.get_atk_range()
 
 ## 获取攻击
 func get_atk() -> int:
-	return atk
+	return _unit_stat.get_atk()
 
 ## 获取防御
 func get_def() -> int:
-	return def
+	return _unit_stat.get_def()
 
 ## 获取单位的移动力上限
 func get_move_points() -> int:
-	return move_point
+	return _unit_stat.get_move_point()
 
 ## 获取阵营
 func get_faction() -> Faction:
@@ -141,10 +151,32 @@ func get_faction() -> Faction:
 ## 获取特定地形的移动消耗
 ## 如果 terrain 不在字典中或值为 -1，则表示不可通行
 func get_move_cost(terrain: int) -> int:
-	if move_cost_map.has(terrain):
-		return move_cost_map[terrain]
-	return -1 # 默认不可通行
+	return _unit_stat.get_move_cost(terrain)
 
 ## 获取所有地形对应的消耗力字典
 func get_move_cost_map() -> Dictionary:
-	return move_cost_map
+	return _unit_stat.get_move_cost_map()
+
+## 获取速度
+func get_speed() -> int:
+	if not _unit_stat:
+		return 0
+	return _unit_stat.get_speed()
+
+## 获取最大生命值
+func get_max_hp() -> int:
+	return _unit_stat.get_max_hp()
+
+## 创建当前状态的 BUnit 快照
+func create_b_unit(cell_pos: Vector2i) -> BUnit:
+	var b_unit = BUnit.new()
+	b_unit.set_data(unit_stat, get_faction(), cell_pos, _current_direction, _current_hp)
+	return b_unit
+
+## 从 BUnit 恢复数据
+func restore_from_b_unit(b_unit: BUnit) -> void:
+	unit_stat = b_unit.unit_stat
+	set_faction(b_unit.faction)
+	_current_hp = b_unit.current_hp
+	_current_direction = b_unit.direction
+	play_idle(b_unit.direction)

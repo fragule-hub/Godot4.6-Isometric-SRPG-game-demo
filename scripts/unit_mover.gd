@@ -9,8 +9,10 @@ signal move_finished
 
 ## 使单位沿路径移动
 func move_unit(unit: Unit, path: Array[Vector2i]) -> void:
+	if not game_area or not game_area.game_grid: return
+	
 	if path.size() <= 1:
-		emit_signal("move_finished")
+		move_finished.emit() 
 		return
 		
 	# 记录起始和结束网格坐标，用于后续更新 UnitGrid 数据
@@ -18,8 +20,7 @@ func move_unit(unit: Unit, path: Array[Vector2i]) -> void:
 	var end_grid_pos = path[-1]
 	
 	# 1. 从原网格移除单位引用（逻辑层）
-	if game_area and game_area.game_grid:
-		game_area.game_grid.grid_data[start_grid_pos]["unit"] = null
+	game_area.game_grid.remove_unit(start_grid_pos)
 		
 	# 2. 开始逐格移动
 	var tween = create_tween()
@@ -47,7 +48,6 @@ func move_unit(unit: Unit, path: Array[Vector2i]) -> void:
 	unit.play_idle()
 	
 	# 4. 在新网格注册单位引用（逻辑层）
-	if game_area and game_area.game_grid:
-		game_area.game_grid.grid_data[end_grid_pos]["unit"] = unit
+	game_area.game_grid.add_unit(unit, end_grid_pos)
 		
-	emit_signal("move_finished")
+	move_finished.emit()

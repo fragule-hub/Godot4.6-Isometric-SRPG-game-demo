@@ -1,5 +1,5 @@
 extends BaseState
 
 func _on_enter() -> void:
-	battle._backup_state.clear()
+	battle.clear_rollback_state()
 	parent_fsm.change_state("SwitchState")
