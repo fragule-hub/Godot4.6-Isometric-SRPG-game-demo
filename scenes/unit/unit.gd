@@ -38,7 +38,6 @@ var _unit_stat: UnitStat
 var _current_hp: int = 1
 
 @export var skills: Array[BaseSkill]
-var _skill: BaseSkill
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 ## 当前方向，默认为SE，东南
@@ -66,17 +65,19 @@ func play_animation(state: String, dir: Direction = _current_direction) -> void:
 	animated_sprite.animation = "%s_%s" % [dir_name, state]
 	animated_sprite.play()
 
-func play_animation_for_skill(state: String, dir: Direction = _current_direction) -> bool:
-	if not animated_sprite or not animated_sprite.sprite_frames:
-		return false
+func play_animation_for_skill(state: String, dir: Direction = _current_direction) -> void:
 	_current_direction = dir
 	var dir_name = Direction.keys()[dir]
 	var animation_key = "%s_%s" % [dir_name, state.to_upper()]
+	
+	# 如果指定动画不存在，尝试播放默认 skill 动画
 	if not animated_sprite.sprite_frames.has_animation(animation_key):
-		return false
+		animation_key = "%s_SKILL" % dir_name
+		if not animated_sprite.sprite_frames.has_animation(animation_key):
+			return
+	
 	animated_sprite.animation = animation_key
 	animated_sprite.play()
-	return true
 
 func play_idle(dir: Direction = _current_direction) -> void:
 	play_animation(ANIM_STATE.IDLE, dir)
@@ -87,11 +88,7 @@ func play_move(dir: Direction = _current_direction) -> void:
 func get_skill(skill_index: int) -> BaseSkill:
 	if skill_index < 0 or skill_index >= skills.size():
 		return null
-	var selected_skill = skills[skill_index]
-	if selected_skill:
-		_skill = selected_skill
-		return _skill
-	return null
+	return skills[skill_index]
 
 ## 受到伤害
 func take_damage(amount: int) -> void:

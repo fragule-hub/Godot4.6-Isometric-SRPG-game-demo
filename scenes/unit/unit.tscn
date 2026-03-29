@@ -15,6 +15,7 @@ size = Vector2(32, 32)
 [node name="Unit" type="Area2D" unique_id=318891723]
 y_sort_enabled = true
 script = ExtResource("1_fvc8g")
+faction = null
 unit_stat = ExtResource("2_w7udy")
 skills = Array[ExtResource("2_3po7s")]([ExtResource("3_0wuuu"), ExtResource("4_w7udy"), ExtResource("5_vqlpx"), ExtResource("6_0wuuu")])
 

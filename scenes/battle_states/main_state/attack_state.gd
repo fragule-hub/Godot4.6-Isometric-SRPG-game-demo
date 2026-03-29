@@ -30,7 +30,7 @@ func _state_input(event: InputEvent) -> void:
 
 	# 尝试选择技能 (仅在键盘按键事件时触发，避免不必要的调用)
 	if event is InputEventKey and event.pressed:
-		var selected_skill = battle.try_select_main_unit_skill_from_event(event)
+		var selected_skill = battle.try_select_skill(event)
 		if selected_skill:
 			parent_fsm.change_state("SkillState")
 			return

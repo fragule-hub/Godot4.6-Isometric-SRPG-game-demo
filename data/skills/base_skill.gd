@@ -96,22 +96,16 @@ func get_cast_range_cells(caster: Unit, game_grid: GameGrid, range_calculator: R
 	return []
 
 ## 获取技能实际生效的覆盖范围（受击/受益区域）
-## @param _caster: 施法者 (部分技能可能需要基于施法者位置计算，暂未用到)
 ## @param target_pos: 技能释放的目标中心点
 ## @param direction: 技能释放方向（仅当 is_directional 为 true 时有效）
 ## @param range_calculator: 范围计算工具
 ## @return: 返回所有受技能影响的网格坐标数组
-func get_skill_area_cells(_caster: Unit, target_pos: Vector2i, direction: Vector2i, range_calculator: RangeCalculator) -> Array[Vector2i]:
+func get_skill_area_cells(target_pos: Vector2i, direction: Vector2i, range_calculator: RangeCalculator) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
-	
-	if not range_calculator:
-		return result
 		
 	if is_directional:
-		# 使用 RangeCalculator 的方向性范围算法 (如直线、锥形)
 		result = range_calculator.get_directional_range_cells(target_pos, direction, area_range, area_shape)
 	else:
-		# 使用 RangeCalculator 的扩散性范围算法 (如圆形、方形)
 		result = range_calculator.get_range_cells(target_pos, area_range.x, area_algorithm)
 			
 	return result
@@ -123,7 +117,7 @@ func get_skill_area_cells(_caster: Unit, target_pos: Vector2i, direction: Vector
 ## @param battle: 战斗场景上下文 (提供 GameGrid, RangeCalculator, AttackProcessor 等)
 func execute(caster: Unit, target_pos: Vector2i, direction: Vector2i, battle: Battle) -> void:
 	# 1. 获取技能覆盖的所有网格
-	var affected_cells: Array[Vector2i] = get_skill_area_cells(caster, target_pos, direction, battle.range_calculator)
+	var affected_cells: Array[Vector2i] = get_skill_area_cells(target_pos, direction, battle.range_calculator)
 	
 	# 2. 遍历网格，筛选有效目标并应用效果
 	for cell in affected_cells:
@@ -134,8 +128,7 @@ func execute(caster: Unit, target_pos: Vector2i, direction: Vector2i, battle: Ba
 		# 验证目标是否符合筛选条件
 		if target_unit and _is_valid_target(caster, target_unit):
 			# 3. 应用具体效果 (伤害、治疗、Buff等)
-			@warning_ignore("redundant_await")
-			await _apply_effect(caster, target_unit, battle)
+			_apply_effect(caster, target_unit, target_pos, battle)
 
 ## 判断目标单位是否有效
 ## @param caster: 施法者
@@ -171,10 +164,9 @@ func _is_valid_target(caster: Unit, target: Unit) -> bool:
 ## 应用具体效果（虚函数，由子类重写）
 ## @param caster: 施法者
 ## @param target: 目标单位
+## @param target_pos: 施法时选择的目标中心点
 ## @param battle: 战斗场景上下文
-func _apply_effect(caster: Unit, target: Unit, battle: Battle) -> void:
-	# 默认实现：如果提供了 attack_processor，则造成基于倍率的伤害
+func _apply_effect(caster: Unit, target: Unit, _target_pos: Vector2i, battle: Battle) -> void:
 	if battle.attack_processor:
-		# 调用攻击处理器的造成伤害方法
 		battle.attack_processor.execute_damage(caster, target, power_multiplier)
 		return

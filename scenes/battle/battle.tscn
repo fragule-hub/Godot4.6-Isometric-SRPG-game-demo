@@ -11,17 +11,21 @@
 [ext_resource type="Script" uid="uid://dsbkrku32wmt6" path="res://scenes/battle/game_area/game_area.gd" id="8_py4tk"]
 [ext_resource type="Script" uid="uid://34v5ou3uyia8" path="res://scenes/battle/game_grid/game_grid.gd" id="9_agsc7"]
 [ext_resource type="PackedScene" uid="uid://d2qjvxor7ulxr" path="res://scenes/highlight_line/highlight_selector/highlight_selector.tscn" id="11_fisqk"]
+[ext_resource type="Script" uid="uid://5b63qudjfbne" path="res://scenes/battle_states/main_state/skill_state_machine.gd" id="11_n5ix6"]
+[ext_resource type="Script" uid="uid://3rl020fght7c" path="res://scenes/battle_states/skill_state/get_cast_range.gd" id="11_ueicy"]
 [ext_resource type="Script" uid="uid://brljgi4a67uhn" path="res://scripts/unit_spawner.gd" id="12_mxe8n"]
+[ext_resource type="Script" uid="uid://bd26vgin0u32t" path="res://scenes/battle_states/skill_state/select_origin.gd" id="12_n5ix6"]
 [ext_resource type="Script" uid="uid://dxbem8jkfn17c" path="res://scenes/battle_states/switch_state.gd" id="12_w40i5"]
 [ext_resource type="Script" uid="uid://b0wm1fl3rkx3g" path="res://scenes/battle_states/enemy_state.gd" id="13_8eh2s"]
 [ext_resource type="Script" uid="uid://cfl41oajsota7" path="res://scripts/grid_calculator.gd" id="13_icoan"]
+[ext_resource type="Script" uid="uid://d0sjqe4gbokg1" path="res://scenes/battle_states/skill_state/get_skill_range.gd" id="13_tnndc"]
+[ext_resource type="Script" uid="uid://bx4g70okxwr3g" path="res://scenes/battle_states/skill_state/execute_skill.gd" id="14_k6ux7"]
 [ext_resource type="Script" uid="uid://c2xvnt17g1t36" path="res://scripts/range_selector.gd" id="14_kd6yx"]
 [ext_resource type="Script" uid="uid://c2vlq6c5ip65b" path="res://scenes/battle_states/finish_state.gd" id="15_5moxy"]
 [ext_resource type="Script" uid="uid://coi1iqprlk86h" path="res://scripts/unit_mover.gd" id="15_t1kk3"]
 [ext_resource type="Script" uid="uid://s4nv7vemnssq" path="res://scripts/path_painter.gd" id="16_n6gaa"]
 [ext_resource type="Script" uid="uid://k1625dsftswm" path="res://scripts/range_calculator.gd" id="17_6ofp8"]
 [ext_resource type="Script" uid="uid://iw0dm5y23bq0" path="res://scripts/attack_processor.gd" id="18_mvulk"]
-[ext_resource type="Script" uid="uid://do6awmkv6124t" path="res://scenes/battle_states/main_state/skill_state.gd" id="19_4mgyt"]
 [ext_resource type="Script" uid="uid://cwaky2hix33mp" path="res://scripts/knockback_processor.gd" id="23_156m4"]
 [ext_resource type="Script" uid="uid://c6h802adkwyjv" path="res://scripts/game_reseter.gd" id="24_pyfix"]
 
@@ -92,8 +96,22 @@ script = ExtResource("5_agsc7")
 [node name="AttackState" type="Node" parent="BattleStateMachine/MainState" unique_id=790051716]
 script = ExtResource("6_oiw7q")
 
-[node name="SkillState" type="Node" parent="BattleStateMachine/MainState" unique_id=607721103]
-script = ExtResource("19_4mgyt")
+[node name="SkillState" type="Node" parent="BattleStateMachine/MainState" unique_id=35372419]
+script = ExtResource("11_n5ix6")
+initial_state_name = &"GetCastRange"
+metadata/_custom_type_script = "uid://5b63qudjfbne"
+
+[node name="GetCastRange" type="Node" parent="BattleStateMachine/MainState/SkillState" unique_id=323608078]
+script = ExtResource("11_ueicy")
+
+[node name="SelectOrigin" type="Node" parent="BattleStateMachine/MainState/SkillState" unique_id=1920798090]
+script = ExtResource("12_n5ix6")
+
+[node name="GetSkillRange" type="Node" parent="BattleStateMachine/MainState/SkillState" unique_id=2121035431]
+script = ExtResource("13_tnndc")
+
+[node name="ExecuteSkill" type="Node" parent="BattleStateMachine/MainState/SkillState" unique_id=684566920]
+script = ExtResource("14_k6ux7")
 
 [node name="EnemyState" type="Node" parent="BattleStateMachine" unique_id=109992424]
 script = ExtResource("13_8eh2s")

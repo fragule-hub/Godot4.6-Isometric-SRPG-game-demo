@@ -59,46 +59,42 @@ func get_main_unit() -> Unit:
 func get_current_unit_index() -> int:
 	return all_units.current_unit_index
 
-func select_main_unit_skill(skill_index: int) -> BaseSkill:
-	var main_unit = get_main_unit()
-	if not main_unit:
+func select_skill(skill_index: int) -> BaseSkill:
+	var unit = get_main_unit()
+	if not unit:
 		return null
 	
-	if not main_unit.has_method("get_skill"):
+	if not unit.has_method("get_skill"):
 		push_warning("Unit does not have get_skill method")
 		return null
 		
-	var selected_skill = main_unit.get_skill(skill_index)
+	var selected_skill = unit.get_skill(skill_index)
 	if selected_skill:
 		_current_skill = selected_skill
 		print("Battle: Selected skill: ", selected_skill.skill_name)
 	return selected_skill
 
-func try_select_main_unit_skill_from_event(event: InputEvent) -> BaseSkill:
-	var skill_index = _extract_skill_index_from_event(event)
-	if skill_index < 0:
-		return null
-	return select_main_unit_skill(skill_index)
-
-func _extract_skill_index_from_event(event: InputEvent) -> int:
+func try_select_skill(event: InputEvent) -> BaseSkill:
 	if not (event is InputEventKey):
-		return -1
+		return null
 	var key_event = event as InputEventKey
 	if not key_event.pressed or key_event.echo:
-		return -1
+		return null
 	
+	var skill_index: int
 	match key_event.keycode:
-		KEY_1, KEY_KP_1: return 0
-		KEY_2, KEY_KP_2: return 1
-		KEY_3, KEY_KP_3: return 2
-		KEY_4, KEY_KP_4: return 3
-		KEY_5, KEY_KP_5: return 4
-		KEY_6, KEY_KP_6: return 5
-		KEY_7, KEY_KP_7: return 6
-		KEY_8, KEY_KP_8: return 7
-		KEY_9, KEY_KP_9: return 8
-		
-	return -1
+		KEY_1, KEY_KP_1: skill_index = 0
+		KEY_2, KEY_KP_2: skill_index = 1
+		KEY_3, KEY_KP_3: skill_index = 2
+		KEY_4, KEY_KP_4: skill_index = 3
+		KEY_5, KEY_KP_5: skill_index = 4
+		KEY_6, KEY_KP_6: skill_index = 5
+		KEY_7, KEY_KP_7: skill_index = 6
+		KEY_8, KEY_KP_8: skill_index = 7
+		KEY_9, KEY_KP_9: skill_index = 8
+		_: return null
+	
+	return select_skill(skill_index)
 
 func _on_unit_died(unit: Unit) -> void:
 	if unit in active_units:
