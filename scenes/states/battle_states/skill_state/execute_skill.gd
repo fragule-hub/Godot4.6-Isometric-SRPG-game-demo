@@ -18,7 +18,8 @@ func _on_enter() -> void:
 	await caster.animated_sprite.animation_finished
 	caster.play_idle(unit_direction)
 	
-	skill.execute(caster, target_pos, direction, battle)
+	@warning_ignore("redundant_await")
+	await skill.execute(caster, target_pos, direction, battle)
 	
 	parent_fsm.parent_fsm.parent_fsm.change_state("EndState")
 	
