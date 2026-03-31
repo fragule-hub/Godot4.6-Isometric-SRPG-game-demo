@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BaseSkill" format=3 uid="uid://bhibmh4xjw5aj"]
+
+[ext_resource type="Script" uid="uid://bffcyp58u07hs" path="res://data/skills/base_skill.gd" id="1_l6qv7"]
+
+[resource]
+script = ExtResource("1_l6qv7")
+animation_name = "atk"
+origin_type = 1
+cast_range = 4
+area_range = Vector2i(3, 1)
+area_shape = 3
+power_multiplier = 2.0
+target_filter = 0
+metadata/_custom_type_script = "uid://bffcyp58u07hs"

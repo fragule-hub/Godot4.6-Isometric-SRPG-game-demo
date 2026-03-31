@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BaseSkill" format=3 uid="uid://6hrbarukd816"]
+
+[ext_resource type="Script" uid="uid://bffcyp58u07hs" path="res://data/skills/base_skill.gd" id="1_mif18"]
+
+[resource]
+script = ExtResource("1_mif18")
+animation_name = "skill"
+origin_type = 0
+cast_range = 4
+area_range = Vector2i(4, 1)
+area_shape = 2
+is_directional = true
+power_multiplier = 1.5
+target_filter = 0
+metadata/_custom_type_script = "uid://bffcyp58u07hs"

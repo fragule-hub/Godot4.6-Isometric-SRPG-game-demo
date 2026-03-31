@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnitStat" format=3 uid="uid://c62rato1itdis"]
+
+[ext_resource type="Script" uid="uid://bnl2g6gnngr3x" path="res://data/unit_stats/unit_stat.gd" id="1_rjggl"]
+
+[resource]
+script = ExtResource("1_rjggl")
+move_cost_map = {
+0: 1,
+1: 2,
+2: 3,
+3: -1
+}
+max_hp = 12
+metadata/_custom_type_script = "uid://bnl2g6gnngr3x"

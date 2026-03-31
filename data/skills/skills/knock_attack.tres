@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3 uid="uid://xgvqivbbqd7l"]
+
+[ext_resource type="Script" uid="uid://y1bre3frd3mg" path="res://data/skills/skill_scripts/knockback_skill.gd" id="1_tp868"]
+
+[resource]
+script = ExtResource("1_tp868")
+knockback_distance = 10
+animation_name = "atk"
+origin_type = 1
+cast_range = 2
+area_range = Vector2i(3, 0)
+target_filter = 0
+metadata/_custom_type_script = "uid://bffcyp58u07hs"

@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bfao1piy5npxh"]
+
+[ext_resource type="PackedScene" uid="uid://u4nwa2ph11je" path="res://scenes/highlight_line/highlight_line.tscn" id="1_1eukw"]
+[ext_resource type="Script" uid="uid://didh5tu01p72m" path="res://scenes/highlight_line/highlight_selector/highlight_selector.gd" id="2_golwv"]
+
+[node name="HighlightSelector" unique_id=750827666 instance=ExtResource("1_1eukw")]
+script = ExtResource("2_golwv")
+
+[node name="Label-1" type="Label" parent="." index="0" unique_id=608490255]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 10.0
+offset_right = 20.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "(3,1)"
+
+[node name="Label-2" type="Label" parent="." index="1" unique_id=675723581]
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "LAND"
+
+[node name="Label-3" type="Label" parent="." index="2" unique_id=1376501432]
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -36.0
+offset_right = 16.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "ROCK"

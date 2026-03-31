@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3 uid="uid://cm1ek50epj1wv"]
+
+[ext_resource type="Script" uid="uid://xids68dghdby" path="res://data/skills/skill_scripts/heal_skill.gd" id="1_7nv31"]
+
+[resource]
+script = ExtResource("1_7nv31")
+animation_name = "howl"
+origin_type = 0
+area_range = Vector2i(3, 0)
+include_self = true
+target_filter = 2
+metadata/_custom_type_script = "uid://bffcyp58u07hs"
