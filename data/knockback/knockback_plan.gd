@@ -4,7 +4,7 @@ class_name KnockbackPlan
 ## 碰撞类型
 enum CollisionType { NONE, OBSTACLE, UNIT }
 
-## 起始格子（默认为无效值）
+## 起始格子
 var start_cell: Vector2i = Vector2i(-999, -999)
 ## 落点格子
 var landing_cell: Vector2i = Vector2i(-999, -999)
@@ -35,10 +35,10 @@ func is_valid() -> bool:
 func has_collision() -> bool:
 	return collision_type != CollisionType.NONE
 
-## 碰撞是否为障碍物
+## 碰撞是否碰撞到了障碍物
 func is_obstacle_collision() -> bool:
 	return collision_type == CollisionType.OBSTACLE
 
-## 碰撞是否为单位
+## 碰撞是否碰撞到了单位
 func is_unit_collision() -> bool:
 	return collision_type == CollisionType.UNIT

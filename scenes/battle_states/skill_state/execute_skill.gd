@@ -44,7 +44,7 @@ func _on_enter() -> void:
 	caster.play_idle(unit_direction)
 	
 	# 执行技能效果
-	skill.execute(caster, target_pos, direction, battle)
+	await skill.execute(caster, target_pos, direction, battle)
 	
 	print("ExecuteSkill: Skill executed successfully!")
 	
